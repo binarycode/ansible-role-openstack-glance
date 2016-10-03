@@ -1,0 +1,9 @@
+---
+- name: Configure Glance services.
+  service:
+    name:    '{{ item }}'
+    state:   started
+    enabled: yes
+  with_items:
+    - openstack-glance-api
+    - openstack-glance-registry

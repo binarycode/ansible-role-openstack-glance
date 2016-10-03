@@ -1,0 +1,24 @@
+- name: 'Download {{ image.name }} image.'
+  get_url:
+    url:  '{{ image.url }}'
+    dest: '{{ image.dest }}'
+
+- block:
+    - name:         Get list of images.
+      register:     glance_images
+      changed_when: no
+      command:      openstack image list -f value -c Name
+
+    - name:    'Create {{ image.name }} image.'
+      command: 'openstack image create "{{ image.name }}" --file {{ image.dest }} --disk-format qcow2 --container-format bare --public'
+      when:    '"{{ image.name }}" not in glance_images.stdout'
+
+  environment:
+    OS_PROJECT_DOMAIN_NAME:  default
+    OS_USER_DOMAIN_NAME:     default
+    OS_PROJECT_NAME:         admin
+    OS_USERNAME:             admin
+    OS_PASSWORD:             '{{ keystone_admin_password }}'
+    OS_AUTH_URL:             'http://{{ keystone_host }}:35357/v3'
+    OS_IDENTITY_API_VERSION: 3
+    OS_IMAGE_API_VERSION:    2

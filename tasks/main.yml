@@ -1,0 +1,10 @@
+---
+- include: packages.yml
+- include: configuration.yml
+- include: database.yml
+- include: initialize.yml
+- include: services.yml
+- include: image.yml
+  with_items: '{{ images }}'
+  loop_control:
+    loop_var: image

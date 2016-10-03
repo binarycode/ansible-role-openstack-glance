@@ -1,0 +1,13 @@
+---
+- name:         Get list of Image endpoints.
+  register:     openstack_image_endpoints
+  changed_when: no
+  command:      openstack endpoint list -f value -c Interface --service image
+
+- name:    Create Image endpoints.
+  command: 'openstack endpoint create --region {{ region }} image {{ item.key }} {{ item.value }}'
+  when:    '"{{ item.key }}" not in openstack_image_endpoints.stdout'
+  with_dict:
+    public:   'http://{{ host }}:9292'
+    internal: 'http://{{ host }}:9292'
+    admin:    'http://{{ host }}:9292'

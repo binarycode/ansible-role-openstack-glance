@@ -1,0 +1,17 @@
+---
+host: controller
+
+mysql_host: controller
+mysql_password:
+
+keystone_host: controller
+keystone_password:
+
+keystone_admin_password:
+
+region: RegionOne
+
+images:
+  - name: CirrOS
+    url:  http://download.cirros-cloud.net/0.3.4/cirros-0.3.4-x86_64-disk.img
+    dest: /root/cirros-0.3.4-x86_64-disk.img

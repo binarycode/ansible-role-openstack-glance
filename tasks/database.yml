@@ -1,0 +1,24 @@
+---
+- name: Create Glance DB.
+  mysql_db:
+    login_host: '{{ mysql_host }}'
+    name:       glance
+    state:      present
+
+- name: Create Glance DB users.
+  mysql_user:
+    name:       glance
+    login_host: '{{ mysql_host }}'
+    password:   '{{ mysql_password }}'
+    priv:       glance.*:ALL
+    state:      present
+    host:       '{{ item }}'
+  with_items:
+    - localhost
+    - '%'
+
+- name:         Populate Glance DB.
+  changed_when: no
+  command:      glance-manage db_sync
+  become:       true
+  become_user:  glance

@@ -1,0 +1,13 @@
+---
+- name:         Get list of users.
+  register:     openstack_users
+  changed_when: no
+  command:      openstack user list -f value -c Name --domain default
+
+- name:    Create Image user.
+  command: 'openstack user create --domain default --password {{ keystone_password }} glance'
+  when:    '"glance" not in openstack_users.stdout'
+
+- name:         Assign role to Image user.
+  changed_when: no
+  command:      'openstack role add --project service --user glance admin'

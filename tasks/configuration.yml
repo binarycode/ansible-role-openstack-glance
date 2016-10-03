@@ -1,0 +1,18 @@
+---
+- include: configuration/access.yml
+  with_items:
+    - /etc/glance/glance-api.conf
+    - /etc/glance/glance-registry.conf
+  loop_control:
+    loop_var: path
+
+- name: Configure image store.
+  ini_file:
+    dest:    /etc/glance/glance-api.conf
+    section: glance_store
+    option:  '{{ item.key }}'
+    value:   '{{ item.value }}'
+  with_dict:
+    stores:                   file,http
+    default_store:            file
+    filesystem_store_datadir: /var/lib/glance/images/

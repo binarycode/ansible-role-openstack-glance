@@ -1,0 +1,4 @@
+- name: Install Glance package.
+  yum:
+    name:  openstack-glance
+    state: present
